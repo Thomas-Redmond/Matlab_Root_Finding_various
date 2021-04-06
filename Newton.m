@@ -23,5 +23,4 @@ while i <= N0
    p0 = p;  
 end
 %fprintf('Method failed after %d iterations\n', N0);
-
 end
