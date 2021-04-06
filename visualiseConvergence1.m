@@ -1,15 +1,15 @@
 % pass function as parameter
 function visualiseConvergence1(y)    
-    tic;    
-% create matrix for storing values
-    runFor = 1000; % change variable to change 
+    % Function takes approximately 135 seconds for 1000 iteration
+    tic;    % start function speed timer
+    runFor = 10; % change variable to change for iterations on testdata
 
     syms f(x);
-    f(x) = y;
-    df = matlabFunction(diff(f));
+    f(x) = y;   % store function given as parameter as symbolic
+    df = matlabFunction(diff(f));   % store differentiated function as df
     dataX = -10:(20/runFor):10; % stores values in required range at evenly spaced increments
     dataY = arrayfun(y , dataX); % performs function y on each element of dataX storing in dataY
-    firstBad = runFor+1;        % set to 1001 as outside limit but 
+    firstBad = runFor+1;        % set to just outside limit
     
     
     
@@ -26,11 +26,20 @@ function visualiseConvergence1(y)
         
     end
     
-    plot(dataX(1:firstBad-1), dataY(1:firstBad-1), "-b"); % data that converges plots in blue
+    GraphNewton = graph();
+    
+    
     hold on;
     if firstBad <= runFor
+        plot(dataX(firstBad - 1 : firstBad), dataY(firstBad - 1 : firstBad), "-black"); % plots data that between converge and not
         plot(dataX(firstBad : runFor), dataY(firstBad:runFor), "-r"); % data that does not converge in red
     end
+    plot(dataX(1:firstBad-1), dataY(1:firstBad-1), "-b"); % data that converges plots in blue
+    
+    title("Newton graph for function: " + char(y));
+    legend("Data not available", "Does not converge within limit", "Converges");
+    
     toc;
+    clear;
 end
     
