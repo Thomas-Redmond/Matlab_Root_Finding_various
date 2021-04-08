@@ -51,6 +51,7 @@ function visualiseConvergence1(y)
         if isnan(resultOst) && firstBadOst == runFor + 1
             % Newton timed-out + first bad not already recorded
             firstBadOst = i;
+            disp(firstBadOst);
         end
         
         % display current iteration for debugging purposes
@@ -88,11 +89,13 @@ function visualiseConvergence1(y)
    % PLOTTING FOR OST GRAPH
    
    graph2 = figure(2);
+   hold on;
    plot(dataX(1:firstGoodOst), dataY(1:firstGoodOst), "or", "MarkerSize", 1);
     
    if firstBadOst <= runFor
         % if non-convergence occurred after convergence input
         % this need to be plotted in RED
+        disp("First bad");
         plot(dataX(firstBadOst : runFor), dataY(firstBadOst : runFor), "or", "MarkerSize", 1);
    end
    
