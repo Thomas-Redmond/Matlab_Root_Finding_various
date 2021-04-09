@@ -6,10 +6,10 @@
 function p = Newton(f, df, p0, TOL, N0)
 %fprintf('%3d:%16.9f\n', 0, p0);
 %Step 1:
-if f(p0) == 0
-    p = p0;
-    return;
-end
+% if f(p0) == 0
+%     p = p0;
+%     return;
+% end
 
 i = 1;
 %Step 2:

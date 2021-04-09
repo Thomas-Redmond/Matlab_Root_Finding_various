@@ -104,8 +104,8 @@ function visualiseConvergence1(y)
    
    title("Ost graph for function: " + char(y));
    
-
-    toc;
-    clear;
+   hold off;
+   toc;
+   clear;
 end
     
