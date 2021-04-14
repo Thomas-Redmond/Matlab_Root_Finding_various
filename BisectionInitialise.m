@@ -16,8 +16,6 @@ function [a, b] = BisectionInitialise(f, a, b)
         Ya = f(a);
         Yb = f(b);
         if (Ya >= 0 && Yb < 0) || (Ya < 0 && Yb >= 0)
-            fprintf("Value of f(a) = %d\n", f(a));
-            fprintf("Value of f(b) = %d\n", f(b));
             return; % end function
         else
             a = (a + b) / 2; % a set to midpoint of range

@@ -10,10 +10,13 @@
 % 0.00001
 % 100
 function p = RootFindingImproved(f, a, b, TOL, N0)
-    [a, b] = BisectionInitialise2(f, a, b); % Return better starting positions
+    syms y(x);
+    y(x) = f;
+    df = matlabFunction(diff(y));
+
+    [a, b] = BisectionInitialise(f, a, b); % Return better starting positions
     p = Bisection(f, a, b, TOL, 5); % run 5 times for better starting value
     p = Ostrowski(f, df, p, TOL, N0);
     
-    printf("Value Returned = %d", p);
-    clear;
+    fprintf("Value Returned = %d", p);
 end

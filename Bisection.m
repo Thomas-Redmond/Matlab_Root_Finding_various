@@ -12,7 +12,7 @@ end
 %Step 1:
 i = 1;
 FA = f(a);
-fprintf('%-3s %-16s %-16s %-16s %-16s\n', 'n', 'an', 'bn', 'pn', 'f(pn)'); 
+%fprintf('%-3s %-16s %-16s %-16s %-16s\n', 'n', 'an', 'bn', 'pn', 'f(pn)'); 
 
 %Step 2:
 while i <= N0 
@@ -22,10 +22,10 @@ while i <= N0
     %Step 4:
     err = (b-a)/min(abs(a),abs(b));
     if err < TOL
-        fprintf('Solution found: p = %g\n', p);
+        %fprintf('Solution found: p = %g\n', p);
         return
     end
-    fprintf('%3d %-16.9f %-16.9f %-16.9f %-16.9f\n', i, a, b, p, FP);
+    %fprintf('%3d %-16.9f %-16.9f %-16.9f %-16.9f\n', i, a, b, p, FP);
     %Step 5:
     i = i + 1;
     %Step 6:
@@ -37,6 +37,6 @@ while i <= N0
     end
 end
 %Step 7
-fprintf('Method failed after %d iterations\n', N0);
+%fprintf('Method failed after %d iterations\n', N0);
 
 end
