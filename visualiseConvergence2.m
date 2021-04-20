@@ -24,8 +24,8 @@ function visualiseConvergence2(f)
     for i = 1: samplingRate % nasty nested for loop to create values required
         for j = 1: samplingRate
             rangeOfValues(i, j) = complex(rangeOfXValues(i), rangeOfXValues(j));
-            NewtonValues((j-1) * samplingRate + i) = Newton(f, df, rangeOfValues(i, j), 0.00001, 100); % perform Newton
-            OstValues((j-1) * samplingRate + i) = Ostrowski(f, df, rangeOfValues(i, j), 0.00001, 100); % perform Ost
+            NewtonValues((j-1) * samplingRate + i) = Newton&p(f, df, rangeOfValues(i, j), 0.00001, 100); % perform Newton
+            OstValues((j-1) * samplingRate + i) = Ostrowski&p(f, df, rangeOfValues(i, j), 0.00001, 100); % perform Ost
         end
     end
     
@@ -84,6 +84,9 @@ function visualiseConvergence2(f)
         end
         
     end
+    
+    
+    
     
     % stores all unique values in list
     NewtonRoots = [NewtonRoots conj(NewtonRoots)];
