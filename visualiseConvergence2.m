@@ -20,18 +20,35 @@ function visualiseConvergence2(f)
     
     NewtonValues = zeros(samplingRate^2,1);
     OstValues = zeros(samplingRate^2,1);
-    
+    NewtonLoops = zeros(samplingRate^2,1);
+    OstLoops = zeros(samplingRate^2,1);
+
+
     for i = 1: samplingRate % nasty nested for loop to create values required
         for j = 1: samplingRate
             rangeOfValues(i, j) = complex(rangeOfXValues(i), rangeOfXValues(j));
-            NewtonValues((j-1) * samplingRate + i) = Newton&p(f, df, rangeOfValues(i, j), 0.00001, 100); % perform Newton
-            OstValues((j-1) * samplingRate + i) = Ostrowski&p(f, df, rangeOfValues(i, j), 0.00001, 100); % perform Ost
+            %NewtonValues((j-1) * samplingRate + i) = Newton&p(f, df, rangeOfValues(i, j), 0.00001, 100); % perform Newton
+            %OstValues((j-1) * samplingRate + i) = Ostrowski&p(f, df, rangeOfValues(i, j), 0.00001, 100); % perform Ost
+            NewtonOut = NewtonAndLoopNo(f, df, rangeOfValues(i, j), 0.00001, 100); % perform Newton
+            OstOut = OstrowskiAndLoopNo(f, df, rangeOfValues(i, j), 0.00001, 100); % perform Ost
+            
+            % Store p values returned
+            NewtonValues((j-1) * samplingRate + i) = NewtonOut(1);
+            OstValues((j-1) * samplingRate + i) = OstOut(1);
+            
+            % Store number of iterations taken values - log mapped
+            % Recale to full dynamic range currentlog map range is 0:2
+            % multiplying by 1/2 dcreases range to 0:1
+            NewtonLoops((j-1) * samplingRate + i) = log10(NewtonOut(2)) * 0.5;
+            OstLoops((j-1) * samplingRate + i) = log10(OstOut(2)) * 0.5;
         end
     end
     
     
     NewtonRoots = NewtonValues(1);
     OstRoots = OstValues(1);
+    
+    % IDENTIFYING UNIQUE ROOTS FOR NEWTON
     
     for i = 1: samplingRate^2
         %fprintf("Comparing %d vs %d\n", NewtonRoots(1), NewtonValues(i)); ||
@@ -58,6 +75,8 @@ function visualiseConvergence2(f)
                 end
             end
         end
+        
+        % IDENTIFYING UNIQUE ROOTS FOR OST
         
         if isnan(real(OstValues(i))) && isnan(real(OstValues(i)))
             % bad data skipping
@@ -88,15 +107,17 @@ function visualiseConvergence2(f)
     
     
     
-    % stores all unique values in list
+    % adds complex conjugates to list of roots, as above method misses them
+    % sorts for order by real value
     NewtonRoots = [NewtonRoots conj(NewtonRoots)];
     NewtonRoots = sort(NewtonRoots, 'ComparisonMethod','real');
     OstRoots = [OstRoots conj(OstRoots)];
     OstRoots = sort(OstRoots, 'ComparisonMethod','real');
     
-    
+    % create figure, and axes for title
     fig1 = figure(1);
-    title('Newton');
+    fig1Axes = axes( fig1 );
+    
     colorMapNewton = colormap(hsv(length(NewtonRoots)));
     imageNewton = zeros(samplingRate, samplingRate, 3);
     for i = 1:length(NewtonValues)
@@ -107,9 +128,7 @@ function visualiseConvergence2(f)
         locY = y + 1; % Matlab appropiate Indexing
         if isnan(real(NewtonValues(i)))
             % bad data hence use midtone grey
-            imageNewton(locX, locY, 1) = 0.5;
-            imageNewton(locX, locY, 2) = 0.5; % colourScale(1, j);
-            imageNewton(locX, locY, 3) = 0.5; % colourScale(1, j);
+            imageNewton(locX, locY, :) = [0.5 0.5 0.5];
             j = length(NewtonRoots) +1; % skip next loop
         else
             j = 1; % perform next loop
@@ -117,16 +136,22 @@ function visualiseConvergence2(f)
         while j <= length(NewtonRoots)
         % check which to place
             if abs(abs(real(NewtonRoots(j))) - abs(real(NewtonValues(i)))) <= 0.001 && abs(abs(real(NewtonRoots(j))) - abs(real(NewtonValues(i)))) <= 0.001
-                imageNewton(locX, locY, :) = colorMapNewton(j, :);
+                imageNewton(locX, locY, 1) = 0.5 * (colorMapNewton(j, 1) + NewtonLoops(i));
+                imageNewton(locX, locY, 2) = 0.5 * (colorMapNewton(j, 2) + NewtonLoops(i));
+                imageNewton(locX, locY, 3) = 0.5 * (colorMapNewton(j, 3) + NewtonLoops(i));
                 j = length(NewtonRoots) + 1;
             end
             j = j +1;
         end
     end
-    imshow(imageNewton);
+    % display image on figure
+    imshow(imageNewton, 'Parent', fig1Axes);
+    title( fig1Axes, 'Newton' ); % Set title
     
-    fig1 = figure(2);
-    title('Ostrowski');
+    % create figure and axes for seconf image
+    fig2 = figure(2);
+    fig2Axes = axes( fig2 );
+    
     colorMapOst = colormap(hsv(length(OstRoots)));
     imageOst = zeros(samplingRate, samplingRate, 3);
     for i = 1:length(OstValues)
@@ -148,11 +173,15 @@ function visualiseConvergence2(f)
         % check which to place
             if abs(abs(real(OstRoots(j))) - abs(real(OstValues(i)))) <= 0.001 && abs(abs(real(OstRoots(j))) - abs(real(OstValues(i)))) <= 0.001
                 imageOst(locX, locY, :) = colorMapOst(j, :);
+                imageOst(locX, locY, 1) = 0.5 * (colorMapOst(j, 1) + OstLoops(i));
+                imageOst(locX, locY, 2) = 0.5 * (colorMapOst(j, 2) + OstLoops(i));
+                imageOst(locX, locY, 3) = 0.5 * (colorMapOst(j, 3) + OstLoops(i));
                 j = length(NewtonRoots) + 1;
             end
             j = j +1;
         end
     end
-    imshow(imageOst);
+    imshow(imageOst, 'Parent', fig2Axes);
+    title( fig2Axes, 'Ostrowski' );
     toc;
 end

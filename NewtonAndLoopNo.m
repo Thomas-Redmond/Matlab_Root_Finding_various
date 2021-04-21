@@ -3,7 +3,7 @@
 % tolerance (as relative error)
 % N0 (max. iterations)
 % Output: the value p
-function p = Newton(f, df, p0, TOL, N0)
+function output = NewtonAndLoopNo(f, df, p0, TOL, N0)
 %fprintf('%3d:%16.9f\n', 0, p0);
 %Step 1:
 % if f(p0) == 0
@@ -20,6 +20,7 @@ while i <= N0
    %Step 4:
    if abs(p - p0) < TOL
        %fprintf('Solution found p = %g\n', p);
+       output = [p i];
        return
    end
    %Step 5:
@@ -29,4 +30,5 @@ while i <= N0
 end
 %fprintf('Method failed after %d iterations\n', N0);
 p = NaN;
+output = [p NaN];
 end
