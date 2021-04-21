@@ -43,11 +43,10 @@ function NewtonMulti(f, df, p0, TOL, N0)
     graph1 = figure(1);
     plot(dataX(1:runFor), dataY(1:runFor), "ob", "MarkerSize", 1); % plot results to graph
     hline = refline(0,0); % create a reference line
-    disp(arrayRoots);
-    disp(size(arrayRoots));
     for i = 1:length(arrayRoots)
         if arrayRoots(i) <= 10 && arrayRoots(i) >= -10 % if within bounds include
             plot(arrayRoots(i), 0 , "or", "MarkerSize", 5);
+            fprintf("Root @ (%d, 0)\n", arrayRoots(i));
         end
     end
     %plot(arrayRoots(1:size(arrayRoots)), [0, 0, 0, 0, 0, 0, 0, 0, 0, 0] , "or", "MarkerSize", 3); % plot root results on graph in big red blips

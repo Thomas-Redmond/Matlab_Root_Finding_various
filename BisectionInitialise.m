@@ -16,6 +16,7 @@ function [a, b] = BisectionInitialise(f, a, b)
         Ya = f(a);
         Yb = f(b);
         if (Ya >= 0 && Yb < 0) || (Ya < 0 && Yb >= 0)
+            disp([a b]);
             return; % end function
         else
             a = (a + b) / 2; % a set to midpoint of range
@@ -23,5 +24,5 @@ function [a, b] = BisectionInitialise(f, a, b)
         end
     end
     
-    
+    disp([a b]);
 end
