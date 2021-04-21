@@ -10,8 +10,7 @@ function visualiseConvergence2(f)
     % range of elements a and b in x lie in range [-1, 1]
     tic;
     samplingRate = 400; % testing with 20 values
-    rangeOfXValues = -1:(1--1)/(samplingRate-1):1; % 400 values required this will create 20 possible values
-    rangeOfValues = zeros(samplingRate, samplingRate); % 20 * 20 = 400 so create 20x20 matrix using values
+    rangeOfXValues = -1:(1--1)/(samplingRate-1):1; % 400 values required this will create 20 possible value
     
     % get dy/dx of function given as paramenter
     syms y(x);
@@ -26,11 +25,11 @@ function visualiseConvergence2(f)
 
     for i = 1: samplingRate % nasty nested for loop to create values required
         for j = 1: samplingRate
-            rangeOfValues(i, j) = complex(rangeOfXValues(i), rangeOfXValues(j));
+            temp = complex(rangeOfXValues(i), rangeOfXValues(j));
             %NewtonValues((j-1) * samplingRate + i) = Newton&p(f, df, rangeOfValues(i, j), 0.00001, 100); % perform Newton
             %OstValues((j-1) * samplingRate + i) = Ostrowski&p(f, df, rangeOfValues(i, j), 0.00001, 100); % perform Ost
-            NewtonOut = NewtonAndLoopNo(f, df, rangeOfValues(i, j), 0.00001, 100); % perform Newton
-            OstOut = OstrowskiAndLoopNo(f, df, rangeOfValues(i, j), 0.00001, 100); % perform Ost
+            NewtonOut = NewtonAndLoopNo(f, df, temp, 0.00001, 100); % perform Newton
+            OstOut = OstrowskiAndLoopNo(f, df, temp, 0.00001, 100); % perform Ost
             
             % Store p values returned
             NewtonValues((j-1) * samplingRate + i) = NewtonOut(1);
